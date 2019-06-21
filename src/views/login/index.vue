@@ -9,6 +9,7 @@
           <el-input placeholder="手機號" v-model="form.mobile"></el-input>
         </el-form-item>
         <el-form-item>
+          <!-- el-col 柵格佈局，共24列；:span 指定佔用的大小；:offset 指定偏移量 -->
           <el-col :span="14">
             <el-input placeholder="驗證碼" v-model="form.code"></el-input>
           </el-col>
@@ -25,6 +26,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'AppLogin',
   data () {
@@ -40,7 +43,13 @@ export default {
       console.log('submit!')
     },
     handleSendCode () {
-      console.log('code')
+      const { mobile } = this.form
+      axios({
+        method: 'GET',
+        url: `https://mock.boxuegu.com/mock/434/v1_0/captchas/${mobile}`
+      }).then(res => {
+        console.log(res.data)
+      })
     }
   }
 }
@@ -49,7 +58,7 @@ export default {
 <style lang='less' scoped>
 .login-wrap {
   height: 100%;
-  background: url('./login_bg.jpg') center;
+  background: url('../../assets/login_bg.jpg') center;
   display: flex;
   justify-content: center;
   align-items: center;
