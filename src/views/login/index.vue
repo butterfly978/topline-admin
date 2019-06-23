@@ -2,23 +2,23 @@
   <div class="login-wrap">
     <div class="form-wrap">
       <div class="form-head">
-        <img src="./logo_index.png" alt="黑馬頭條號">
+        <img src="./logo_index.png" alt="黑马头条号">
       </div>
       <el-form class="form-content" ref="form" :model="form">
         <el-form-item >
-          <el-input placeholder="手機號" v-model="form.mobile"></el-input>
+          <el-input placeholder="手机号" v-model="form.mobile"></el-input>
         </el-form-item>
         <el-form-item>
           <!-- el-col 柵格佈局，共24列；:span 指定佔用的大小；:offset 指定偏移量 -->
           <el-col :span="14">
-            <el-input placeholder="驗證碼" v-model="form.code"></el-input>
+            <el-input placeholder="验证码" v-model="form.code"></el-input>
           </el-col>
           <el-col :offset="1" :span="7">
-            <el-button @click="handleSendCode">獲取驗證碼</el-button>
+            <el-button @click="handleSendCode">获取验证码</el-button>
           </el-col>
         </el-form-item>
         <el-form-item>
-          <el-button class="btn-login" type="primary" @click="handleSubmit">登錄</el-button>
+          <el-button class="btn-login" type="primary" @click="handleSubmit">登录</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -50,7 +50,26 @@ export default {
         method: 'GET',
         url: `https://mock.boxuegu.com/mock/434/v1_0/captchas/${mobile}`
       }).then(res => {
-        console.log(res.data)
+        const { data } = res.data
+        window.initGeetest({
+          // 以下配置參數來自服務端 SDK
+          gt: data.gt,
+          challenge: data.challenge,
+          offline: !data.success,
+          new_captcha: data.new_captcha,
+          product: 'bind' // 隱藏，直接彈出式
+        }, function (captchaObj) {
+          captchaObj.onReady(function () {
+            // 驗證碼ready之後才能調用verify方法顯示驗證碼
+            captchaObj.verify() // 彈出驗證碼內容框
+          }).onSuccess(function () {
+            console.log(captchaObj.getValidate())
+          }).onError(function () {
+            // your code
+          })
+          // 在這裡註冊“發送驗證碼”按鈕的點擊事件，再驗證用戶是否輸入手機號以及手機號格式是否正確：
+          // captchaObj.verify
+        })
       })
     }
   }
