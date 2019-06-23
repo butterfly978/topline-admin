@@ -27,6 +27,8 @@
 
 <script>
 import axios from 'axios'
+// 引入極驗 JavaScript SDK 文件，通過window.initGeetest使用
+import '@/vendor/gt'
 
 export default {
   name: 'AppLogin',
