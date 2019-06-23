@@ -63,7 +63,22 @@ export default {
             // 驗證碼ready之後才能調用verify方法顯示驗證碼
             captchaObj.verify() // 彈出驗證碼內容框
           }).onSuccess(function () {
-            console.log(captchaObj.getValidate())
+            const {
+              geetest_challenge: challenge,
+              geetest_seccode: seccode,
+              geetest_validate: validate } =
+            captchaObj.getValidate()
+            axios({
+              method: 'GET',
+              url: `http://ttapi.research.itcast.cn/mp/v1_0/sms/codes/${mobile}`,
+              params: {
+                challenge,
+                validate,
+                seccode
+              }
+            }).then(res => {
+              console.log(res.data)
+            })
           }).onError(function () {
             // your code
           })
