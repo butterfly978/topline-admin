@@ -4,11 +4,17 @@
       <div class="form-head">
         <img src="./logo_index.png" alt="黑马头条号">
       </div>
-      <el-form class="form-content" ref="form" :model="form">
-        <el-form-item >
+      <!-- 配置校验规则
+          rules 规则对象配置到 el-form 上,rules 中配置的校验字段必须和表单数据对象保持一致
+          prop  校验字段配置到 el-form-item 上
+        JavaScript 触发验证
+          给 el-form 添加 ref
+          调用 this.$refs['ref名字'].validate(valid => {}) 触发验证 -->
+      <el-form class="form-content" ref="form" :model="form" :rules="rules">
+        <el-form-item prop="mobile">
           <el-input placeholder="手机号" v-model="form.mobile"></el-input>
         </el-form-item>
-        <el-form-item>
+        <el-form-item prop="code">
           <!-- el-col 柵格佈局，共24列；:span 指定佔用的大小；:offset 指定偏移量 -->
           <el-col :span="14">
             <el-input placeholder="验证码" v-model="form.code"></el-input>
@@ -16,6 +22,10 @@
           <el-col :offset="1" :span="7">
             <el-button @click="handleSendCode">获取验证码</el-button>
           </el-col>
+        </el-form-item>
+        <el-form-item>
+          <el-checkbox class="agree-checkbox" v-model="form.agree"></el-checkbox>
+          <span class="agree-text">我已阅读并同意<a href="#">用户协议</a>和<a href="#">隐私条款</a></span>
         </el-form-item>
         <el-form-item>
           <el-button class="btn-login" type="primary" @click="handleLogin">登录</el-button>
@@ -36,12 +46,36 @@ export default {
     return {
       form: {
         mobile: '',
-        code: ''
+        code: '',
+        agree: ''
+      },
+      rules: {
+        mobile: [
+          { required: true, message: '请输入手机号', trigger: 'blur' },
+          { pattern: /\d{11}/, message: '请输入有效手机号', trigger: 'blur' }
+        ],
+        code: [
+          { required: true, message: '请输入验证码', trigger: 'blur' },
+          { pattern: /\d{6}/, message: '请输入有效验证码', trigger: 'blur' }
+        ],
+        agree: [
+          { required: true, message: '请同意用户协议' },
+          { pattern: /true/, message: '请同意用户协议' }
+        ]
       }
     }
   },
   methods: {
-    handleLogin () {
+    handleLogin (form) {
+      this.$refs['form'].validate(valid => {
+        if (!valid) {
+          return
+        }
+        // 表单验证通过，提交登录申请
+        this.submitLogin()
+      })
+    },
+    submitLogin () {
       axios({
         method: 'POST',
         url: 'http://ttapi.research.itcast.cn/mp/v1_0/authorizations',
@@ -127,6 +161,13 @@ export default {
     padding: 25px;
     background-color: #fff;
     border-radius: 20px;
+    .agree-checkbox {
+      margin-right: 10px;
+    }
+    .agree-text {
+      font-size: 16px;
+      color: #999;
+    }
     .btn-login{
       width: 100%;
     }
