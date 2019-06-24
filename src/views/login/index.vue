@@ -94,6 +94,16 @@ export default {
       }) // >=400 的状态码进入这里
     },
     handleSendCode () {
+      // 验证手机号是否有效
+      this.$refs['form'].validateField('mobile', errorMessage => {
+        if (errorMessage.trim().length > 0) {
+          return
+        }
+        // 验证通过，初始化显示验证码
+        this.showGeetest()
+      })
+    },
+    showGeetest () {
       const { mobile } = this.form
       axios({
         method: 'GET',
