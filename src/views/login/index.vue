@@ -60,12 +60,12 @@ export default {
           { pattern: /\d{6}/, message: '请输入有效验证码', trigger: 'blur' }
         ],
         agree: [
-          { required: true, message: '请同意用户协议' },
-          { pattern: /true/, message: '请同意用户协议' }
+          { required: true, message: '请同意用户协议' }, // 只校验是否有值，不关心是 true 还是 false
+          { pattern: /true/, message: '请同意用户协议' } // 为了校验数据值必须是 true
         ]
       },
       codeTimer: null, // 倒计时定时器
-      codeTimeSeconds: initCodeTimeSeconds // 倒计时事件
+      codeTimeSeconds: initCodeTimeSeconds // 倒计时时间
     }
   },
   methods: {

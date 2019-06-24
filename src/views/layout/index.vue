@@ -39,7 +39,7 @@ export default {
   background-color: #343a46;
 }
 .el-header {
-  background-color: #aec0d1;
+  // background-color: #aec0d1;
 }
 .el-main {
   background-color: #e8eff4;
