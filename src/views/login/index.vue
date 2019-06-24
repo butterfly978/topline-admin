@@ -20,7 +20,7 @@
             <el-input placeholder="验证码" v-model="form.code"></el-input>
           </el-col>
           <el-col :offset="1" :span="7">
-            <el-button @click="handleSendCode" :disabled="!!codeTimer">{{ codeTimer ? `剩余${codeTimeSeconds}秒` : '获取验证码' }}</el-button>
+            <el-button @click="codeCountDown" :disabled="!!codeTimer">{{ codeTimer ? `剩余${codeTimeSeconds}秒` : '获取验证码' }}</el-button>
           </el-col>
         </el-form-item>
         <el-form-item>
@@ -39,7 +39,7 @@
 import axios from 'axios'
 // 引入極驗 JavaScript SDK 文件，通過window.initGeetest使用
 import '@/vendor/gt'
-const initCodeTimeSeconds = 10
+const initCodeTimeSeconds = 60
 
 export default {
   name: 'AppLogin',
@@ -148,8 +148,6 @@ export default {
           }).onError(function () {
             // your code
           })
-          // 在這裡註冊“發送驗證碼”按鈕的點擊事件，再驗證用戶是否輸入手機號以及手機號格式是否正確：
-          // captchaObj.verify
         })
       })
     },
