@@ -70,7 +70,7 @@ export default {
     }
   },
   methods: {
-    handleLogin (form) {
+    handleLogin () {
       this.$refs['form'].validate(valid => {
         if (!valid) {
           return

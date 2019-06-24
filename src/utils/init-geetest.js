@@ -1,6 +1,7 @@
 import '@/vendor/gt'
+
 export default function (options) {
-  return new PromiseRejectionEvent((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     window.initGeetest(options, captchaObj => {
       resolve(captchaObj)
     })
