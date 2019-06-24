@@ -18,59 +18,39 @@
     active-text-color="#ffd04b"
     :router="true">
     <el-menu-item index="/">
-      <i class="el-icon-menu"></i>
+      <i class="iconfont icon-home"></i>
       <span slot="title">首页</span>
     </el-menu-item>
     <el-submenu index="1">
       <template slot="title">
-        <i class="el-icon-location"></i>
-        <span>内容管理</span>
+        <i class="iconfont icon-document"></i>
+        <span>内容</span>
       </template>
       <el-menu-item index="/publish">
-        <i class="el-icon-menu"></i>
-        <span slot="title">发布文章</span>
-      </el-menu-item>
-      <el-menu-item index="1-2">
-        <i class="el-icon-menu"></i>
-        <span slot="title">内容列表</span>
+        <i class="iconfont icon-edit"></i>
+        <span slot="title">发布</span>
       </el-menu-item>
       <el-menu-item index="1-3">
-        <i class="el-icon-menu"></i>
-        <span slot="title">评论列表</span>
-      </el-menu-item>
-      <el-menu-item index="1-4">
-        <i class="el-icon-menu"></i>
-        <span slot="title">素材管理</span>
+        <i class="iconfont icon-icon-articles"></i>
+        <span slot="title">内容列表</span>
       </el-menu-item>
     </el-submenu>
-    <el-submenu index="2">
-      <template slot="title">
-        <i class="el-icon-location"></i>
-        <span>粉丝管理</span>
-      </template>
-      <el-menu-item index="2-1">
-        <i class="el-icon-menu"></i>
-        <span slot="title">图文数据</span>
-      </el-menu-item>
-      <el-menu-item index="2-2">
-        <i class="el-icon-menu"></i>
-        <span slot="title">粉丝概况</span>
-      </el-menu-item>
-      <el-menu-item index="2-3">
-        <i class="el-icon-menu"></i>
-        <span slot="title">粉丝画像</span>
-      </el-menu-item>
-      <el-menu-item index="2-4">
-        <i class="el-icon-menu"></i>
-        <span slot="title">粉丝列表</span>
-      </el-menu-item>
-    </el-submenu>
-    <el-submenu index="3">
-      <template slot="title">
-        <i class="el-icon-location"></i>
-        <span>账户信息</span>
-      </template>
-    </el-submenu>
+    <el-menu-item index="/comment">
+      <i class="iconfont icon-comment"></i>
+      <span slot="title">评论</span>
+    </el-menu-item>
+    <el-menu-item index="/image">
+      <i class="iconfont icon-image"></i>
+      <span slot="title">素材</span>
+    </el-menu-item>
+    <el-menu-item index="/fans">
+      <i class="iconfont icon-fensi"></i>
+      <span slot="title">粉丝</span>
+    </el-menu-item>
+    <el-menu-item index="/account">
+      <i class="iconfont icon-account"></i>
+      <span slot="title">账户</span>
+    </el-menu-item>
   </el-menu>
 </template>
 
@@ -92,4 +72,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.el-menu {
+  height: 100%;
+}
+.iconfont {
+  margin-right: 10px;
+}
 </style>
