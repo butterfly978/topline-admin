@@ -20,7 +20,7 @@
             <el-input placeholder="验证码" v-model="form.code"></el-input>
           </el-col>
           <el-col :offset="1" :span="7">
-            <el-button @click="handleSendCode">获取验证码</el-button>
+            <el-button @click="handleSendCode" :disabled="!!codeTimer">{{ codeTimer ? `剩余${codeTimeSeconds}秒` : '获取验证码' }}</el-button>
           </el-col>
         </el-form-item>
         <el-form-item>
@@ -39,17 +39,18 @@
 import axios from 'axios'
 // 引入極驗 JavaScript SDK 文件，通過window.initGeetest使用
 import '@/vendor/gt'
+const initCodeTimeSeconds = 10
 
 export default {
   name: 'AppLogin',
   data () {
     return {
-      form: {
+      form: { // 表单数据对象
         mobile: '',
         code: '',
         agree: ''
       },
-      rules: {
+      rules: { // 验证规则对象
         mobile: [
           { required: true, message: '请输入手机号', trigger: 'blur' },
           { pattern: /\d{11}/, message: '请输入有效手机号', trigger: 'blur' }
@@ -62,7 +63,9 @@ export default {
           { required: true, message: '请同意用户协议' },
           { pattern: /true/, message: '请同意用户协议' }
         ]
-      }
+      },
+      codeTimer: null, // 倒计时定时器
+      codeTimeSeconds: initCodeTimeSeconds // 倒计时事件
     }
   },
   methods: {
@@ -103,7 +106,9 @@ export default {
         this.showGeetest()
       })
     },
+    // 验证通过，初始化显示人机交互验证码
     showGeetest () {
+      // 任何函数中的 function 函数内部的this 指向 window
       const { mobile } = this.form
       axios({
         method: 'GET',
@@ -117,11 +122,11 @@ export default {
           offline: !data.success,
           new_captcha: data.new_captcha,
           product: 'bind' // 隱藏，直接彈出式
-        }, function (captchaObj) {
-          captchaObj.onReady(function () {
+        }, captchaObj => {
+          captchaObj.onReady(() => {
             // 驗證碼ready之後才能調用verify方法顯示驗證碼
             captchaObj.verify() // 彈出驗證碼內容框
-          }).onSuccess(function () {
+          }).onSuccess(() => {
             const {
               geetest_challenge: challenge,
               geetest_seccode: seccode,
@@ -137,6 +142,8 @@ export default {
               }
             }).then(res => {
               console.log(res.data)
+              // 发送短信成功，开始倒计时
+              this.codeCountDown()
             })
           }).onError(function () {
             // your code
@@ -145,6 +152,20 @@ export default {
           // captchaObj.verify
         })
       })
+    },
+    // 验证倒计时
+    codeCountDown () {
+      this.codeTimer = window.setInterval(() => {
+        this.codeTimeSeconds--
+        if (this.codeTimeSeconds <= 0) {
+          // 清除定时器
+          window.clearInterval(this.codeTimer)
+          // 让倒计时的时间回归初始状态
+          this.codeTimeSeconds = initCodeTimeSeconds
+          // 将存储定时器引用的变量重新赋值为null
+          this.codeTimer = null
+        }
+      }, 1000)
     }
   }
 }
