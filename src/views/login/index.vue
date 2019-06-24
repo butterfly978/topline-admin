@@ -39,6 +39,7 @@
 import axios from 'axios'
 // 引入極驗 JavaScript SDK 文件，通過window.initGeetest使用
 import '@/vendor/gt'
+import { saveUser } from '@/utils/auth' // 按需加载，加载模块中非 export default 成员
 const initCodeTimeSeconds = 60
 
 export default {
@@ -85,7 +86,8 @@ export default {
         data: this.form
       }).then(res => { // >=200 && <400 的状态码进入这里
         const userInfo = res.data.data
-        window.localStorage.setItem('user_info', JSON.stringify(userInfo))
+        // window.localStorage.setItem('user_info', JSON.stringify(userInfo))
+        saveUser(userInfo)
         this.$message({
           message: '登录成功',
           type: 'success'

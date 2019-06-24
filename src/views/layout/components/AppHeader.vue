@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import { removeUser, getUser } from '@/utils/auth'
+
 export default {
   name: 'AppHeader',
   data () {
@@ -25,10 +27,11 @@ export default {
     }
   },
   created () {
-    this.userInfo = JSON.parse(window.localStorage.getItem('user_info')) || {
-      name: '12345678',
-      photo: 'http://toutiao.meiduo.site/Fkj6tQi3xJwVXi1u2swCElotfdCi'
-    }
+    // this.userInfo = JSON.parse(window.localStorage.getItem('user_info')) || {
+    //   name: '12345678',
+    //   photo: 'http://toutiao.meiduo.site/Fkj6tQi3xJwVXi1u2swCElotfdCi'
+    // }
+    this.userInfo = getUser()
   },
   methods: {
     handleLogout () {
@@ -38,7 +41,8 @@ export default {
         type: 'warning'
       }).then(() => {
         // 清空本地存储中的 user_info
-        window.localStorage.removeItem('user_info')
+        // window.localStorage.removeItem('user_info')
+        removeUser()
         // 跳转到登录页
         this.$router.push({ name: 'login' })
         this.$message({
