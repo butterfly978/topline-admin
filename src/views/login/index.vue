@@ -20,7 +20,7 @@
             <el-input placeholder="验证码" v-model="form.code"></el-input>
           </el-col>
           <el-col :offset="1" :span="7">
-            <el-button @click="codeCountDown" :disabled="!!codeTimer">{{ codeTimer ? `剩余${codeTimeSeconds}秒` : '获取验证码' }}</el-button>
+            <el-button @click="handleSendCode" :disabled="!!codeTimer">{{ codeTimer ? `剩余${codeTimeSeconds}秒` : '获取验证码' }}</el-button>
           </el-col>
         </el-form-item>
         <el-form-item>
@@ -84,7 +84,8 @@ export default {
         url: 'http://ttapi.research.itcast.cn/mp/v1_0/authorizations',
         data: this.form
       }).then(res => { // >=200 && <400 的状态码进入这里
-        console.log(res.data)
+        const userInfo = res.data.data
+        window.localStorage.setItem('user_info', JSON.stringify(userInfo))
         this.$message({
           message: '登录成功',
           type: 'success'
