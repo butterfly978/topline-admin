@@ -6,6 +6,7 @@ import 'nprogress/nprogress.css'
 import axios from 'axios'
 import { getUser, removeUser } from '@/utils/auth'
 import JSONbig from 'json-bigint'
+import store from './store'
 // 先找文件，沒有就找目錄，找到優先加載目錄中的index
 import router from './router'
 // 引入公共樣式文件，最好在 element 文件之後，可以自定義修改 element 內置樣式
@@ -93,5 +94,6 @@ Vue.config.productionTip = false
 
 new Vue({
   router,
+  store, // 将 store 配置到 Vue 根实例中，然后所有组件就可以通过 this.$store 来访问容器中的数据了
   render: h => h(App)
 }).$mount('#app')
