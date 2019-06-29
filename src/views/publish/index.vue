@@ -8,14 +8,15 @@
       </div>
     </div>
     <el-row>
-      <el-col :span="10">
+      <el-col :span="16">
         <!-- 表单 -->
         <el-form ref="form" :model="articleForm" label-width="80px">
           <el-form-item label="标题">
             <el-input v-model="articleForm.title"></el-input>
           </el-form-item>
           <el-form-item label="内容">
-            <el-input type="textarea" v-model="articleForm.content"></el-input>
+            <!-- bidirectional data binding（双向数据绑定） -->
+            <quill-editor v-model="articleForm.content" ref="myQuillEditor" :options="editorOption"></quill-editor>
           </el-form-item>
           <el-form-item label="封面">
           </el-form-item>
@@ -42,22 +43,29 @@
 
 <script>
 import ArticleChannel from '@/components/article-channel'
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+import './quill.user.css'
+import { quillEditor } from 'vue-quill-editor'
 export default {
   name: 'AppPublish',
   components: {
-    ArticleChannel
+    ArticleChannel,
+    quillEditor
   },
   data () {
     return {
       articleForm: {
         title: '', // 标题
         content: '', // 内容
-        channel_id: 3, // 频道
+        channel_id: '', // 频道
         cover: { // 封面
           type: 0, // 封面类型 -1:自动，0-无图，1-1张，3-3张
           images: []
         }
-      }
+      },
+      editorOption: {} // 富文本编辑器配置选项
     }
   },
   methods: {
