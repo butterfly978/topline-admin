@@ -65,11 +65,11 @@ export default {
     async loadArticles () {
       // 除了登录相关接口之后，其它接口都必须在请求头中通过 Authorization 字段提供用户 token
       // 当我们登录成功，服务端会生成一个 token 令牌，放到用户信息中
-      const res = await this.$http({
+      const data = await this.$http({
         method: 'GET',
         url: '/articles'
       })
-      console.log(res.data)
+      console.log(data)
     }
   }
 }

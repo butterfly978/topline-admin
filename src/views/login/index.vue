@@ -80,12 +80,11 @@ export default {
     },
     async submitLogin () {
       try {
-        const res = await this.$http({
+        const userInfo = await this.$http({
           method: 'POST',
           url: '/authorizations',
           data: this.form
         })
-        const userInfo = res.data.data
         saveUser(userInfo)
         this.$message({
           message: '登录成功',
@@ -112,11 +111,10 @@ export default {
     async showGeetest () {
       // 任何函数中的 function 函数内部的this 指向 window
       const { mobile } = this.form
-      const res = await this.$http({
+      const data = await this.$http({
         method: 'GET',
         url: `/captchas/${mobile}`
       })
-      const { data } = res.data
       const captchaObj = await initGeetest({
         // 以下配置參數來自服務端 SDK
         gt: data.gt,

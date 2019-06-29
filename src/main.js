@@ -33,7 +33,14 @@ axios.interceptors.request.use(config => {
 })
 // Axios 响应拦截器：axios 收到的响应会先经过这里
 axios.interceptors.response.use(response => {
-  return response
+  // response 就是响应结果对象
+  // 这里将 response 原样返回，那么你发请求的地方收到的就是 response
+  // 我们可以控制请求收到的响应数据格式
+  if (typeof response.data === 'object' && response.data.data) {
+    return response.data.data
+  } else {
+    return response.data
+  }
 }, error => {
   return Promise.reject(error)
 })
