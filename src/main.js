@@ -4,7 +4,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'nprogress/nprogress.css'
 import axios from 'axios'
-import { getUser } from '@/utils/auth'
+import { getUser, removeUser } from '@/utils/auth'
 // 先找文件，沒有就找目錄，找到優先加載目錄中的index
 import router from './router'
 // 引入公共樣式文件，最好在 element 文件之後，可以自定義修改 element 內置樣式
@@ -32,7 +32,7 @@ axios.interceptors.request.use(config => {
   return Promise.reject(error)
 })
 // Axios 响应拦截器：axios 收到的响应会先经过这里
-axios.interceptors.response.use(response => {
+axios.interceptors.response.use(response => { // >= 200 && < 400 的状态码会进入这里
   // response 就是响应结果对象
   // 这里将 response 原样返回，那么你发请求的地方收到的就是 response
   // 我们可以控制请求收到的响应数据格式
@@ -41,7 +41,16 @@ axios.interceptors.response.use(response => {
   } else {
     return response.data
   }
-}, error => {
+}, error => { // >= 400 的状态码会进入这里
+  // 如果用户 token 无效，让其跳转到登录页面
+  if (error.response.status === 401) {
+    // 清除本地存储中的无效 token 的用户信息
+    removeUser()
+    // 跳转到用户登录页面
+    router.push({
+      name: 'login'
+    })
+  }
   return Promise.reject(error)
 })
 Vue.use(ElementUI)
