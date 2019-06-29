@@ -69,9 +69,9 @@
         <el-table-column prop="pubdate" label="发布时间" width="180">
         </el-table-column>
         <el-table-column label="操作">
-          <template>
+          <template slot-scope="scope">
             <el-button size="mini" type="primary" plain>修改</el-button>
-            <el-button size="mini" type="danger" plain>删除</el-button>
+            <el-button size="mini" type="danger" plain @click="handleDelete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -133,6 +133,9 @@ export default {
     this.loadChannels()
   },
   methods: {
+    handleDelete (item) {
+      console.log(item.id.toString())
+    },
     handleDateChange (value) {
       this.filterParams.begin_pubdate = value[0]
       this.filterParams.end_pubdate = value[1]

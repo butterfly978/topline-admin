@@ -5,6 +5,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import 'nprogress/nprogress.css'
 import axios from 'axios'
 import { getUser, removeUser } from '@/utils/auth'
+import JSONbig from 'json-bigint'
 // 先找文件，沒有就找目錄，找到優先加載目錄中的index
 import router from './router'
 // 引入公共樣式文件，最好在 element 文件之後，可以自定義修改 element 內置樣式
@@ -18,6 +19,29 @@ import './styles/index.less'
 axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0'
 // axios.defaults.baseURL = 'http://toutiao.course.itcast.cn/mp/v1_0'
 
+/* 如何解决后端返回数据中的数字超出安全整数范围问题？
+   axios 预留的自定义处理后端返回的原始数据
+   可以理解成也是一个响应拦截器，这个比较特殊
+   这里的 data 是后端返回的未经处理的原始数据
+   axios 默认使用 JONS.parse 去转换原始数据，如果其中有超出安全整数范围的数据就有问题了
+   所以我们在这里可以手动处理这个原始数据
+     npm i json-biginit
+     JSONbig.parse(原始json格式字符串) */
+axios.defaults.transformResponse = [function (data) {
+  // console.log('transformResponse => ', data)
+  // return data
+  // 这里使用 JSONbig.parse 转换原始数据
+  // 类似于 JSON.parse
+  // 但是它会处理其中超出安全整数范围的整数问题
+  // 严谨一点，如果 data 不是 json 格式字符串就会报错
+  try {
+    // 如果是 json 格式字符串，那就转换并返回给后续使用
+    return JSONbig.parse(data)
+  } catch (err) {
+    // 报错就意味着 data 不是 json 格式字符串，这里就直接原样返回给后续使用
+    return data
+  }
+}]
 /* Axios 请求拦截器：axios 发出去的请求会先经过这里
    config 是本次请求相关的配置对象 */
 axios.interceptors.request.use(config => {
