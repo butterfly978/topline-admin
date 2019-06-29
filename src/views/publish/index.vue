@@ -68,7 +68,24 @@ export default {
       editorOption: {} // 富文本编辑器配置选项
     }
   },
+  created () {
+    if (this.$route.name === 'publish-edit') {
+      this.loadArticle()
+    }
+  },
   methods: {
+    async loadArticle () {
+      try {
+        const data = await this.$http({
+          method: 'GET',
+          url: `/articles/${this.$route.params.id}`
+        })
+        this.articleForm = data
+      } catch (err) {
+        console.log(err)
+        this.$message.error('获取文章失败')
+      }
+    },
     async handlePublish (draft) {
       try {
         await this.$http({
