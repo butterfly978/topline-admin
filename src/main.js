@@ -4,6 +4,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'nprogress/nprogress.css'
 import axios from 'axios'
+import { getUser } from '@/utils/auth'
 // 先找文件，沒有就找目錄，找到優先加載目錄中的index
 import router from './router'
 // 引入公共樣式文件，最好在 element 文件之後，可以自定義修改 element 內置樣式
@@ -16,6 +17,26 @@ import './styles/index.less'
 // axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0'
 axios.defaults.baseURL = 'http://toutiao.course.itcast.cn/mp/v1_0'
 
+/* Axios 请求拦截器：axios 发出去的请求会先经过这里
+   config 是本次请求相关的配置对象 */
+axios.interceptors.request.use(config => {
+  const user = getUser()
+  // 如果有 user 数据，则往本次请求中添加用户 token
+  if (user) {
+    config.header.Authorization = `Bearer ${user.token}`
+  }
+  // return config 是允许请求发送的开关
+  // 我们可以在这之前进行一些业务逻辑操作
+  return config
+}, error => {
+  return Promise.reject(error)
+})
+// Axios 响应拦截器：axios 收到的响应会先经过这里
+axios.interceptors.response.use(response => {
+  return response
+}, error => {
+  return Promise.reject(error)
+})
 Vue.use(ElementUI)
 
 // 所有组件都是 Vue 的实例

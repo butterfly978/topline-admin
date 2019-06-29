@@ -30,7 +30,7 @@ const router = new Router({
         {
           name: 'article',
           path: '/article',
-          component: () => import('@views/article')
+          component: () => import('@/views/article')
         }
       ]
     },
