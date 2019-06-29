@@ -36,8 +36,7 @@
 </template>
 
 <script>
-// 引入極驗 JavaScript SDK 文件，通過window.initGeetest使用
-import '@/vendor/gt'
+// import '@/vendor/gt' // 引入極驗 JavaScript SDK 文件，通過window.initGeetest使用
 import { saveUser } from '@/utils/auth' // 按需加载，加载模块中非 export default 成员
 import initGeetest from '@/utils/init-geetest'
 const initCodeTimeSeconds = 60
