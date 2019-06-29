@@ -14,8 +14,9 @@ import './styles/index.less'
 // 发请求的时候就不需要每次都写 http://xxxx
 // 例如我要请求登录，直接 axios({ url: '/authorizations' })
 // 路径最后的 /，多退少补
-// axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0'
-axios.defaults.baseURL = 'http://toutiao.course.itcast.cn/mp/v1_0'
+// 线上接口直接使用你的手机号 + 246810 就可以登录
+axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0'
+// axios.defaults.baseURL = 'http://toutiao.course.itcast.cn/mp/v1_0'
 
 /* Axios 请求拦截器：axios 发出去的请求会先经过这里
    config 是本次请求相关的配置对象 */
@@ -24,7 +25,7 @@ axios.interceptors.request.use(config => {
   // 如果有 user 数据，则往本次请求中添加用户 token
   if (user) {
     config.header.Authorization = `Bearer ${user.token}`
-  }
+  } // 注意 Bearer 后面的空格
   // return config 是允许请求发送的开关
   // 我们可以在这之前进行一些业务逻辑操作
   return config
@@ -51,6 +52,8 @@ axios.interceptors.response.use(response => { // >= 200 && < 400 的状态码会
       name: 'login'
     })
   }
+  // 返回一个理解 reject 失败的 Promise
+  // 这里抛出异常是为了能让你后续 Promise 调用能正确的收到这里的异常
   return Promise.reject(error)
 })
 Vue.use(ElementUI)
