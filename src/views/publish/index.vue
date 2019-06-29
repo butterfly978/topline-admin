@@ -3,8 +3,8 @@
     <div slot="header" class="header">
       <span>发布文章</span>
       <div>
-        <el-button type="success">发布</el-button>
-        <el-button type="primary">存入草稿</el-button>
+        <el-button type="success" @click="handlePublish(false)">发布</el-button>
+        <el-button type="primary" @click="handlePublish(true)">存入草稿</el-button>
       </div>
     </div>
     <el-row>
@@ -44,6 +44,26 @@ export default {
           type: 0, // 封面类型 -1:自动，0-无图，1-1张，3-3张
           images: []
         }
+      }
+    }
+  },
+  methods: {
+    async handlePublish (draft) {
+      try {
+        await this.$http({
+          method: 'POST',
+          url: '/articles',
+          params: {
+            draft
+          },
+          data: this.articleForm
+        })
+        this.$message({
+          type: 'success',
+          message: '发布成功'
+        })
+      } catch (err) {
+        this.$message.error('发布失败', err)
       }
     }
   }
